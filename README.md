@@ -41,6 +41,15 @@ python analyze.py              # stats + figures
 Every run is resumable: rerunning the same config picks up from its last
 checkpoint, and batch scripts skip runs that already completed.
 
+On RunPod, `runpod_autorun.sh` runs the sweep, analyzes it, then stops or
+terminates the pod so an unattended run stops billing when it finishes. It
+refuses to terminate unless `outputs/` is on a mounted network volume, since
+terminate deletes everything else.
+
+```bash
+tmux new -s auto -d './scripts/runpod_autorun.sh configs/sweep 0 terminate'
+```
+
 ## Run directory layout
 
 ```
