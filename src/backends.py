@@ -237,6 +237,20 @@ class HFBackend(Backend):
         inputs = self.tokenizer(prompt, return_tensors="pt").to(self.device)
         prompt_len = inputs.input_ids.shape[1]
 
+        # Capture via a hook on just the target layer instead of
+        # output_hidden_states=True, which would materialize every layer's
+        # hidden states over the full sequence (an O(num_layers) memory
+        # multiplier that grows with conversation length since history is
+        # unbounded by default).
+        captured: dict = {}
+
+        def capture_hook(_module, _inputs, output):
+            hs = output[0] if isinstance(output, tuple) else output
+            captured["act"] = hs[0, -1, :].detach().clone()
+            return output
+
+        cap_handle = self._decoder_layers[self.capture_layer].register_forward_hook(
+            capture_hook)
         handle = self._perturb_hook(perturb) if perturb is not None else None
         try:
             with torch.no_grad():
@@ -252,17 +266,15 @@ class HFBackend(Backend):
             # stays active here (if any) so the captured activation reflects
             # the same intervention the generation saw.
             with torch.no_grad():
-                fwd = self.model(out_ids, output_hidden_states=True)
+                fwd = self.model(out_ids)
         finally:
+            cap_handle.remove()
             if handle is not None:
                 handle.remove()
 
         resp_ids = out_ids[0, prompt_len:]
         n_new = resp_ids.shape[0]
-        # hidden_states[i] is the output of layer i-1 (index 0 = embeddings);
-        # capture the residual stream *after* decoder layer `capture_layer`.
-        act = fwd.hidden_states[self.capture_layer + 1][0, -1, :]
-        act = act.float().cpu().numpy()
+        act = captured["act"].float().cpu().numpy()
 
         logits = fwd.logits[0, prompt_len - 1:-1, :]  # predicting resp tokens
         logp = torch.log_softmax(logits.float(), dim=-1)
