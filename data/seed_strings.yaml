@@ -1,0 +1,15 @@
+# Seed strings (topics) for the discussion. Cipher-like: ambiguous enough to
+# avoid factual priors, structured enough for attractors to form.
+# topic_id -> seed string. The framing is shared unless overridden per topic.
+framing: "This is a cipher. Discuss what it encodes."
+topics:
+  t01: "x7m3_k9p2_v4n1"
+  t02: "qq4z-8jL-0mmx-3rf"
+  t03: "TRI/9902/HEX/44a"
+  t04: "beta.rho.rho.gamma.7"
+  t05: "0x5F3759DF :: 41 41 41"
+  t06: "moth-lantern-9-ivy-2"
+  t07: "ZZK 14 // NNE 41 // WSW 09"
+  t08: "..-. .-.. ..- -..- $%#"
+  t09: "aleph_02:yod_10:tav_22"
+  t10: "9dQ~2mV~7xC~4pR"

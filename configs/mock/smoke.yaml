@@ -1,0 +1,23 @@
+# CPU dry-run: exercises the full pipeline (capture, convergence, perturbation,
+# springback, zarr, metrics, verbalization, figures) with no GPU or torch.
+#   python run.py --config configs/mock/smoke.yaml
+condition: self_a
+topic_id: t01
+run:
+  seed: 0
+backend: mock
+models:
+  agent_a: {name: mock-alpha}
+  agent_b: {name: mock-alpha}
+conversation:
+  max_turns: 60
+  seed_string: "x7m3_k9p2_v4n1"
+convergence:
+  # the mock contraction converges to ~noise floor; 0.05 fires around round 20
+  threshold: 0.05
+  min_turns: 8
+perturbation:
+  enabled: true
+  scale: 0.6
+  turn: null        # trigger 3 rounds after attractor detection
+  patience: 3

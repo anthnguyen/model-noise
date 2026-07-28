@@ -1,0 +1,16 @@
+# MVP demo run 1/3: Qwen self-play, 50 rounds, no perturbation.
+# ~afternoon artifact: python run.py --config configs/mvp/self_a.yaml
+condition: self_a
+topic_id: t01
+run:
+  seed: 0
+backend: hf
+models:
+  agent_a: {name: Qwen/Qwen2.5-7B-Instruct, quantization: 4bit, device: "cuda:0"}
+  agent_b: {name: Qwen/Qwen2.5-7B-Instruct, quantization: 4bit, device: "cuda:0"}
+conversation:
+  max_turns: 50
+  seed_string: "x7m3_k9p2_v4n1"
+  framing: "This is a cipher. Discuss what it encodes."
+perturbation:
+  enabled: false

@@ -1,0 +1,16 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+*.egg-info/
+
+# Generated run/analysis data — regenerate with run.py / analyze.py
+outputs/
+
+# Auto-generated sweep configs — regenerate with scripts/gen_configs.py
+configs/sweep/
+configs/sweep_mock/
+
+# OS / editor
+.DS_Store
+*.tmp
