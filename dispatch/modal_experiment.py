@@ -26,7 +26,7 @@ APP_NAME = "attractor-sweep"
 GPU_PREFERENCE = ["L40S", "A100", "T4"]  # L40S = best value (48GB, ~$1.90/hr), A100 = fast, T4 = cheap fallback
 TIMEOUT_HOURS = 12
 HF_REPO = "metametal/model-noise-results"
-COMMIT_SHA = "bba53416fa39d827744df42390fa5cd296e9edd4"
+COMMIT_SHA = "79283a087fbb102a6705b80e5fbf0cc882f13111"
 
 # -------- Half 1: Remote function -------------------------------------------
 

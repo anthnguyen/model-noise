@@ -5,7 +5,7 @@ import sys
 from pathlib import Path
 
 APP_NAME = "attractor-sweep-preflight"
-COMMIT_SHA = "bba53416fa39d827744df42390fa5cd296e9edd4"
+COMMIT_SHA = "79283a087fbb102a6705b80e5fbf0cc882f13111"
 
 IMAGE = (
     modal.Image.debian_slim(python_version="3.11")
