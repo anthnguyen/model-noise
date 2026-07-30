@@ -204,8 +204,22 @@ class HFBackend(Backend):
     # -- internals ---------------------------------------------------------- #
 
     def _render(self, messages: list[dict], add_generation_prompt: bool) -> str:
+        # Some models (Gemma) don't support the "system" role.
+        # Merge system message into the first user message when needed.
+        msgs = messages
+        if msgs and msgs[0]["role"] == "system":
+            try:
+                return self.tokenizer.apply_chat_template(
+                    msgs, tokenize=False, add_generation_prompt=add_generation_prompt
+                )
+            except Exception:
+                # System role rejected — merge into first user message
+                system_text = msgs[0]["content"]
+                msgs = list(msgs[1:])  # shallow copy without system
+                if msgs and msgs[0]["role"] == "user":
+                    msgs[0] = dict(msgs[0], content=f"{system_text}\n\n{msgs[0]['content']}")
         return self.tokenizer.apply_chat_template(
-            messages, tokenize=False, add_generation_prompt=add_generation_prompt
+            msgs, tokenize=False, add_generation_prompt=add_generation_prompt
         )
 
     def _perturb_hook(self, perturb: Perturbation):
