@@ -25,7 +25,7 @@ for i in "${!CONFIGS[@]}"; do
     cfg="${CONFIGS[$i]}"
     echo "=== [$((i+1))/$TOTAL] $cfg (gpu $GPU) ==="
     if ! python run.py --config "$cfg" --gpu "$GPU" --skip-completed \
-        >> "outputs/logs/batch_gpu${GPU}.log" 2>&1; then
+            2>&1 | tee -a "outputs/logs/batch_gpu${GPU}.log"; then
         code=$?
         if [ "$code" -eq 3 ]; then
             echo "    interrupted — stopping batch (rerun to resume)"

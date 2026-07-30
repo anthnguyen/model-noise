@@ -119,6 +119,7 @@ def run_sweep(cfg: dict) -> dict:
     batch_result = sp.run(
         ["bash", str(repo_dir / "scripts" / "batch_run.sh"), str(config_dir), "0"],
         cwd=str(repo_dir),
+        check=True,
     )
 
     # Analyze
